@@ -1,65 +1,83 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const toolGroups = [
+  {
+    label: "Text",
+    items: [
+      { href: "/find-replace", title: "Find & Replace", desc: "Search and replace text with regex support. Case-sensitive toggle, replace all or one-by-one.", icon: "↔" },
+      { href: "/remove-ai-chars", title: "Remove AI Characters", desc: "Strip hidden Unicode characters like LRM, RLM, ZWJ, zero-width spaces from AI-generated text.", icon: "🧹" },
+      { href: "/case-converter", title: "Case Converter", desc: "Convert text between lowercase, UPPERCASE, Title Case, camelCase, snake_case, and more.", icon: "Aa" },
+      { href: "/word-counter", title: "Word Counter", desc: "Count words, characters, sentences, and paragraphs in real-time as you type.", icon: "Σ" },
+    ],
+  },
+  {
+    label: "Image",
+    items: [
+      { href: "/resize-image", title: "Resize Image", desc: "Resize images to preset or custom dimensions. Lock aspect ratio, batch resize, multiple formats.", icon: "📐" },
+      { href: "/compress-image", title: "Compress Image", desc: "Reduce image file size with quality slider. Choose output format: JPEG, PNG, WebP, AVIF.", icon: "🗜" },
+    ],
+  },
+  {
+    label: "Convert",
+    items: [
+      { href: "/unit-converter", title: "Unit Converter", desc: "Convert between units of length, weight, temperature, volume, and area.", icon: "⚖" },
+      { href: "/percentage-calculator", title: "Percentage Calculator", desc: "Calculate percentages, discounts, ratios, and percentage change easily.", icon: "%" },
+    ],
+  },
+  {
+    label: "Utility",
+    items: [
+      { href: "/password-generator", title: "Password Generator", desc: "Generate strong random passwords with configurable length, character sets, and strength meter.", icon: "🔐" },
+      { href: "/qr-generator", title: "QR Generator", desc: "Generate custom QR codes with gradient themes, dot/line styles, rounded corners, and center logo.", icon: "▦" },
+      { href: "/date-calculator", title: "Date Calculator", desc: "Calculate date differences and add or subtract days from any date.", icon: "📅" },
+      { href: "/list-randomizer", title: "List Randomizer", desc: "Shuffle lists, pick random items, draw winners — your data stays private.", icon: "🎲" },
+      { href: "/timer-stopwatch", title: "Timer / Stopwatch", desc: "Countdown timer and stopwatch with lap tracking for timing anything.", icon: "⏱" },
+    ],
+  },
+  {
+    label: "Data",
+    items: [
+      { href: "/json-formatter", title: "JSON Formatter", desc: "Format, validate, and minify JSON. Beautify messy JSON with configurable indentation.", icon: "{}" },
+      { href: "/hash-generator", title: "Hash Generator", desc: "Generate SHA-1, SHA-256, SHA-384, and SHA-512 hashes.", icon: "#" },
+    ],
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div>
+      <div className="mb-10">
+        <h1 className="text-3xl font-bold tracking-tight mb-2">
+          Free Online Tools
+        </h1>
+        <p style={{ color: "var(--muted)" }}>
+          Simple utilities that run entirely in your browser. No uploads, no tracking.
+        </p>
+      </div>
+
+      {toolGroups.map((group) => (
+        <div key={group.label} className="mb-10">
+          <h2 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>
+            {group.label}
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {group.items.map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="block p-5 rounded-xl border transition-shadow hover:shadow-md"
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+              >
+                <div className="text-2xl mb-2">{t.icon}</div>
+                <h2 className="font-semibold mb-1">{t.title}</h2>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>
+                  {t.desc}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      ))}
     </div>
   );
 }

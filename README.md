@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tools Dashboard
 
-## Getting Started
+Free online utility tools — 100% client-side, no data uploaded.
 
-First, run the development server:
+## Tools
+
+### Text
+- **Find & Replace** — regex, case-sensitive, replace all
+- **Remove AI Characters** — strip hidden Unicode chars (LRM, RLM, ZWJ, etc.)
+- **Case Converter** — 11 case transforms (lower, UPPER, Title, camelCase, etc.)
+- **Word Counter** — words, chars, sentences, paragraphs, reading time
+
+### Image
+- **Resize Image** — preset sizes, custom dimensions, batch, aspect ratio lock
+- **Compress Image** — quality slider, format JPEG/PNG/WebP/AVIF, batch
+
+### Convert
+- **Unit Converter** — length, weight, temperature, volume, area
+- **Percentage Calculator** — X% of Y, percentage change, ratio
+
+### Utility
+- **Password Generator** — strength meter, char sets, Fisher-Yates shuffle
+- **QR Generator** — gradient themes, dot/line styles, center logo, rounded corners
+- **Date Calculator** — date difference, add/subtract days
+- **List Randomizer** — shuffle, pick randomly, remove picked from list
+- **Timer / Stopwatch** — lap times, countdown with alarm
+
+### Data
+- **JSON Formatter** — format, validate, minify
+- **Hash Generator** — SHA-1/256/384/512
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, Static Export)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Hosting**: Cloudflare Pages
+
+## Local Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # dev server with hot reload
+npm run build     # static export ke folder out/
+npm start         # serve production build via localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Push to GitHub — Cloudflare Pages auto-deploys on every commit to `main`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Build command: `npm run build` • Output dir: `out`
