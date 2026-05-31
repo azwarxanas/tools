@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tools Dashboard — Free Online Utilities",
+  title: "Daily Tools — Free Online Utilities",
   description:
     "Free online tools: text processing, image editing, developer utilities, and more. All processing done in your browser — no data uploaded.",
 };
@@ -77,7 +77,7 @@ export default function RootLayout({
         >
           <div className="p-4 border-b" style={{ borderColor: "var(--border)" }}>
             <Link href="/" className="font-semibold text-lg tracking-tight block">
-              tools.jabjab.ai
+              Daily Tools
             </Link>
           </div>
           <nav className="p-4 flex-1 overflow-y-auto space-y-3">

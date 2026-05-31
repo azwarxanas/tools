@@ -1,4 +1,4 @@
-# Tools Dashboard
+# Daily Tools
 
 Free online utility tools — 100% client-side, no data uploaded.
 
@@ -34,7 +34,6 @@ Free online utility tools — 100% client-side, no data uploaded.
 - **Framework**: Next.js 16 (App Router, Static Export)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
-- **Hosting**: Cloudflare Pages
 
 ## Local Development
 
@@ -44,9 +43,3 @@ npm run dev       # dev server with hot reload
 npm run build     # static export ke folder out/
 npm start         # serve production build via localhost:3000
 ```
-
-## Deployment
-
-Push to GitHub — Cloudflare Pages auto-deploys on every commit to `main`.
-
-Build command: `npm run build` • Output dir: `out`
