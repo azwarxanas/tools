@@ -27,41 +27,30 @@ const ALIGNS = [
   { cmd: "justifyRight", icon: "≡", title: "Align Right" },
 ] as const;
 
+const cleanForDisplay = (h: string) =>
+  h.replace(/<div>/gi, "<p>").replace(/<\/div>/gi, "</p>")
+    .replace(/(<\/?(?:p|h[1-6]|li|ul|ol|blockquote|pre|div|table|tr|td|th)[^>]*>)/gi, "\n$1").trim();
+
 export default function WysiwygEditorPage() {
   const editorRef = useRef<HTMLDivElement>(null);
   const [html, setHtml] = useState("");
   const [copied, setCopied] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     if (editorRef.current && !editorRef.current.innerHTML.trim()) {
       editorRef.current.innerHTML = "<p><br></p>";
-      setHtml(pretty("<p><br></p>"));
+      setHtml(cleanForDisplay("<p><br></p>"));
     }
   }, []);
 
-  const clean = (h: string) => h.replace(/<div>/gi, "<p>").replace(/<\/div>/gi, "</p>");
-
-  const pretty = (h: string) =>
-    h.replace(/(<\/?(?:p|h[1-6]|li|ul|ol|blockquote|pre|div|table|tr|td|th)[^>]*>)/gi, "\n$1").trim();
+  const readHtml = () => {
+    if (editorRef.current) setHtml(cleanForDisplay(editorRef.current.innerHTML));
+  };
 
   const exec = useCallback((cmd: string, val?: string) => {
     document.execCommand(cmd, false, val);
-    if (editorRef.current) {
-      const h = clean(editorRef.current.innerHTML);
-      editorRef.current.innerHTML = h;
-      setHtml(pretty(h));
-    }
+    setTimeout(readHtml, 0);
   }, []);
-
-  const updateHtml = () => {
-    if (editorRef.current) {
-      const h = clean(editorRef.current.innerHTML);
-      if (h !== editorRef.current.innerHTML) editorRef.current.innerHTML = h;
-      setHtml(pretty(h));
-    }
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -70,31 +59,50 @@ export default function WysiwygEditorPage() {
         const node = sel.anchorNode;
         if (node && node.parentElement) {
           const tag = node.parentElement.closest("li, h1, h2, h3, h4, h5, h6");
-          if (tag) return;
+          if (tag) {
+            if (tag.tagName === "LI" && !tag.textContent?.trim()) {
+              e.preventDefault();
+              const parent = tag.parentElement;
+              if (parent) {
+                const p = document.createElement("p");
+                p.innerHTML = "<br>";
+                parent.parentElement?.insertBefore(p, parent.nextSibling);
+                tag.remove();
+                const r = document.createRange();
+                r.setStart(p, 0);
+                r.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(r);
+              }
+              setTimeout(readHtml, 0);
+            }
+            return;
+          }
         }
       }
       e.preventDefault();
       document.execCommand("insertHTML", false, "<p><br></p>");
+      setTimeout(readHtml, 0);
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const text = e.clipboardData.getData("text/plain");
-    const html = e.clipboardData.getData("text/html");
-    if (html) {
+    const htmlData = e.clipboardData.getData("text/html");
+    if (htmlData) {
       const div = document.createElement("div");
-      div.innerHTML = html;
+      div.innerHTML = htmlData;
       div.querySelectorAll("div").forEach((d) => {
         const p = document.createElement("p");
         p.innerHTML = d.innerHTML;
         d.replaceWith(p);
       });
-      document.execCommand("insertHTML", false, clean(div.innerHTML));
+      document.execCommand("insertHTML", false, div.innerHTML);
     } else {
       document.execCommand("insertText", false, text);
     }
-    setTimeout(updateHtml, 0);
+    setTimeout(readHtml, 0);
   };
 
   const handleCopy = async () => {
@@ -154,11 +162,15 @@ export default function WysiwygEditorPage() {
           ref={editorRef}
           contentEditable
           suppressContentEditableWarning
-          onInput={updateHtml}
+          onInput={readHtml}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          className="rounded-lg border p-4 min-h-[250px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] prose prose-sm max-w-none"
-          style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+          className="rounded-lg border p-4 min-h-[250px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+          style={{
+            borderColor: "var(--border)",
+            backgroundColor: "var(--surface)",
+            lineHeight: 1.7,
+          }}
         />
 
         {/* HTML Output */}
@@ -178,12 +190,18 @@ export default function WysiwygEditorPage() {
           />
         </div>
 
-        {/* Clear button */}
-        <button onClick={() => { if (editorRef.current) { editorRef.current.innerHTML = "<p><br></p>"; setHtml(pretty("<p><br></p>")); } }}
+        <button onClick={() => { if (editorRef.current) { editorRef.current.innerHTML = "<p><br></p>"; setHtml(cleanForDisplay("<p><br></p>")); } }}
           className="text-xs px-3 py-1.5 rounded font-medium transition-colors"
           style={{ border: "1px solid var(--border)" }}>
           Clear Editor
         </button>
+
+        <style>{`
+          [contenteditable] p { margin: 0.6em 0; }
+          [contenteditable] h1, [contenteditable] h2, [contenteditable] h3 { margin: 0.8em 0 0.3em; }
+          [contenteditable] ul, [contenteditable] ol { margin: 0.4em 0; padding-left: 1.5em; }
+          [contenteditable] li { margin: 0.2em 0; }
+        `}</style>
       </div>
     </div>
   );
