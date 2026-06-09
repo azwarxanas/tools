@@ -8,6 +8,7 @@ const toolGroups = [
       { href: "/remove-ai-chars", title: "Remove AI Characters", desc: "Strip hidden Unicode characters like LRM, RLM, ZWJ, zero-width spaces from AI-generated text.", icon: "🧹" },
       { href: "/case-converter", title: "Case Converter", desc: "Convert text between lowercase, UPPERCASE, Title Case, camelCase, snake_case, and more.", icon: "Aa" },
       { href: "/word-counter", title: "Word Counter", desc: "Count words, characters, sentences, and paragraphs in real-time as you type.", icon: "Σ" },
+      { href: "/wysiwyg-editor", title: "WYSIWYG Editor", desc: "Rich text editor with HTML output. Format text and copy the generated HTML code.", icon: "📝" },
     ],
   },
   {
@@ -32,6 +33,7 @@ const toolGroups = [
       { href: "/date-calculator", title: "Date Calculator", desc: "Calculate date differences and add or subtract days from any date.", icon: "📅" },
       { href: "/list-randomizer", title: "List Randomizer", desc: "Shuffle lists, pick random items, draw winners — your data stays private.", icon: "🎲" },
       { href: "/timer-stopwatch", title: "Timer / Stopwatch", desc: "Countdown timer and stopwatch with lap tracking for timing anything.", icon: "⏱" },
+      { href: "/spinner", title: "Spinner", desc: "Enter names and spin the wheel to randomly pick a winner.", icon: "🎯" },
     ],
   },
   {

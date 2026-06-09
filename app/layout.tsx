@@ -24,6 +24,7 @@ const menuGroups = [
       { href: "/remove-ai-chars", title: "Remove AI Characters", icon: "🧹" },
       { href: "/case-converter", title: "Case Converter", icon: "Aa" },
       { href: "/word-counter", title: "Word Counter", icon: "Σ" },
+      { href: "/wysiwyg-editor", title: "WYSIWYG Editor", icon: "📝" },
     ],
   },
   {
@@ -48,6 +49,7 @@ const menuGroups = [
       { href: "/date-calculator", title: "Date Calculator", icon: "📅" },
       { href: "/list-randomizer", title: "List Randomizer", icon: "🎲" },
       { href: "/timer-stopwatch", title: "Timer / Stopwatch", icon: "⏱" },
+      { href: "/spinner", title: "Spinner", icon: "🎯" },
     ],
   },
   {
