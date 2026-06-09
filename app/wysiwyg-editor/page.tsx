@@ -31,14 +31,67 @@ export default function WysiwygEditorPage() {
   const editorRef = useRef<HTMLDivElement>(null);
   const [html, setHtml] = useState("");
   const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (editorRef.current && !editorRef.current.innerHTML.trim()) {
+      editorRef.current.innerHTML = "<p><br></p>";
+      setHtml("<p><br></p>");
+    }
+  }, []);
+
+  const clean = (h: string) => h.replace(/<div>/gi, "<p>").replace(/<\/div>/gi, "</p>");
 
   const exec = useCallback((cmd: string, val?: string) => {
     document.execCommand(cmd, false, val);
-    if (editorRef.current) setHtml(editorRef.current.innerHTML);
+    if (editorRef.current) {
+      const h = clean(editorRef.current.innerHTML);
+      editorRef.current.innerHTML = h;
+      setHtml(h);
+    }
   }, []);
 
   const updateHtml = () => {
-    if (editorRef.current) setHtml(editorRef.current.innerHTML);
+    if (editorRef.current) {
+      const h = clean(editorRef.current.innerHTML);
+      if (h !== editorRef.current.innerHTML) editorRef.current.innerHTML = h;
+      setHtml(h);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0) {
+        const node = sel.anchorNode;
+        if (node && node.parentElement) {
+          const tag = node.parentElement.closest("li, h1, h2, h3, h4, h5, h6");
+          if (tag) return;
+        }
+      }
+      e.preventDefault();
+      document.execCommand("insertHTML", false, "<p><br></p>");
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData("text/plain");
+    const html = e.clipboardData.getData("text/html");
+    if (html) {
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      div.querySelectorAll("div").forEach((d) => {
+        const p = document.createElement("p");
+        p.innerHTML = d.innerHTML;
+        d.replaceWith(p);
+      });
+      document.execCommand("insertHTML", false, clean(div.innerHTML));
+    } else {
+      document.execCommand("insertText", false, text);
+    }
+    setTimeout(updateHtml, 0);
   };
 
   const handleCopy = async () => {
@@ -48,10 +101,6 @@ export default function WysiwygEditorPage() {
       setTimeout(() => setCopied(false), 2000);
     } catch {}
   };
-
-  const handlePaste = useCallback(() => {
-    setTimeout(updateHtml, 0);
-  }, []);
 
   return (
     <div>
@@ -103,6 +152,7 @@ export default function WysiwygEditorPage() {
           contentEditable
           suppressContentEditableWarning
           onInput={updateHtml}
+          onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           className="rounded-lg border p-4 min-h-[250px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] prose prose-sm max-w-none"
           style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
@@ -126,7 +176,7 @@ export default function WysiwygEditorPage() {
         </div>
 
         {/* Clear button */}
-        <button onClick={() => { if (editorRef.current) { editorRef.current.innerHTML = ""; setHtml(""); } }}
+        <button onClick={() => { if (editorRef.current) { editorRef.current.innerHTML = "<p><br></p>"; setHtml("<p><br></p>"); } }}
           className="text-xs px-3 py-1.5 rounded font-medium transition-colors"
           style={{ border: "1px solid var(--border)" }}>
           Clear Editor
