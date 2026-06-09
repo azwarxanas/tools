@@ -37,18 +37,21 @@ export default function WysiwygEditorPage() {
     setMounted(true);
     if (editorRef.current && !editorRef.current.innerHTML.trim()) {
       editorRef.current.innerHTML = "<p><br></p>";
-      setHtml("<p><br></p>");
+      setHtml(pretty("<p><br></p>"));
     }
   }, []);
 
   const clean = (h: string) => h.replace(/<div>/gi, "<p>").replace(/<\/div>/gi, "</p>");
+
+  const pretty = (h: string) =>
+    h.replace(/(<\/?(?:p|h[1-6]|li|ul|ol|blockquote|pre|div|table|tr|td|th)[^>]*>)/gi, "\n$1").trim();
 
   const exec = useCallback((cmd: string, val?: string) => {
     document.execCommand(cmd, false, val);
     if (editorRef.current) {
       const h = clean(editorRef.current.innerHTML);
       editorRef.current.innerHTML = h;
-      setHtml(h);
+      setHtml(pretty(h));
     }
   }, []);
 
@@ -56,7 +59,7 @@ export default function WysiwygEditorPage() {
     if (editorRef.current) {
       const h = clean(editorRef.current.innerHTML);
       if (h !== editorRef.current.innerHTML) editorRef.current.innerHTML = h;
-      setHtml(h);
+      setHtml(pretty(h));
     }
   };
 
@@ -176,7 +179,7 @@ export default function WysiwygEditorPage() {
         </div>
 
         {/* Clear button */}
-        <button onClick={() => { if (editorRef.current) { editorRef.current.innerHTML = "<p><br></p>"; setHtml("<p><br></p>"); } }}
+        <button onClick={() => { if (editorRef.current) { editorRef.current.innerHTML = "<p><br></p>"; setHtml(pretty("<p><br></p>")); } }}
           className="text-xs px-3 py-1.5 rounded font-medium transition-colors"
           style={{ border: "1px solid var(--border)" }}>
           Clear Editor
