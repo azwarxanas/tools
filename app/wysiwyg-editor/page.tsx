@@ -121,7 +121,7 @@ export default function WysiwygEditorPage() {
 
       <div className="space-y-4">
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center gap-1 p-2 rounded-lg border" style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}>
+        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-1 p-2 rounded-lg border" style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}>
           {FMT.map((f) => (
             <button key={f.cmd} onClick={() => exec(f.cmd)} title={f.title}
               className="w-8 h-8 rounded text-sm font-bold hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
